@@ -6,13 +6,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2017",
+    "target": "ES2016",
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true
   },
-  "include": [
-    ".eslintrc.js",
-  ]
+
 }
