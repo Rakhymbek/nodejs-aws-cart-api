@@ -21,16 +21,11 @@ export class NestCartServiceStack extends cdk.Stack {
       },
     });
 
-    const sharedLambdaProps: NodejsFunctionProps = {
-      runtime: lambda.Runtime.NODEJS_16_X,
-      bundling: {
-        minify: true,
-        externalModules: ['aws-sdk'],
-      },
-    };
     const nestCartApiLambda = new NodejsFunction(this, 'nestCartApiLambda', {
       entry: path.join(__dirname, '../../dist/main.js'),
-      ...sharedLambdaProps,
+      handler: 'mainHandler',
+      functionName: 'mainHandler',
+      runtime: lambda.Runtime.NODEJS_16_X,
     });
 
     const nestCartApiLambdaIntegration = new HttpLambdaIntegration(
