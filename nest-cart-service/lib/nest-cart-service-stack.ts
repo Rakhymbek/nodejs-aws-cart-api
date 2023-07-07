@@ -21,7 +21,6 @@ export class NestCartServiceStack extends cdk.Stack {
     const nestCartApiLambda = new NodejsFunction(this, 'nestCartApiLambda', {
       entry: path.join(__dirname, '../../dist/main.js'),
       handler: 'mainHandler',
-      functionName: 'mainHandler',
       runtime: lambda.Runtime.NODEJS_16_X,
     });
 
