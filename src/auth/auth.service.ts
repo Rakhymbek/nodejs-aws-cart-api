@@ -8,26 +8,28 @@ import { contentSecurityPolicy } from 'helmet';
 export class AuthService {
   constructor(
     private usersService: UsersService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   validateUser(name: string, password: string): any {
+    console.log('Inside AuthService validateUser method', { name, password });
     const user = this.usersService.findOne(name);
 
     if (user) {
       return user;
     }
 
-    return this.usersService.createOne({ name, password })
+    return this.usersService.createOne({ name, password });
   }
 
   login(user: User, type) {
+    console.log('Inside AuthService login method', user);
     const LOGIN_MAP = {
       jwt: this.loginJWT,
       basic: this.loginBasic,
       default: this.loginJWT,
-    }
-    const login = LOGIN_MAP[ type ]
+    };
+    const login = LOGIN_MAP[type];
 
     return login ? login(user) : LOGIN_MAP.default(user);
   }
@@ -57,7 +59,4 @@ export class AuthService {
       access_token: encodeUserToken(user),
     };
   }
-
-
-
 }

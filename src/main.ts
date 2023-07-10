@@ -20,6 +20,8 @@ async function bootstrapServer(): Promise<express.Express> {
 }
 
 export const mainHandler = async (event, context: Context) => {
+  console.log('Received event:', event);
+  console.log('Received context:', context);
   cachedServer = await bootstrapServer();
   return serverless.proxy(cachedServer, event, context, 'PROMISE').promise;
 };
