@@ -31,6 +31,25 @@ export class NestCartServiceStack extends cdk.Stack {
         PG_USERNAME: process.env.PG_USERNAME as string,
         PG_PASSWORD: process.env.PG_PASSWORD as string,
       },
+      bundling: {
+        minify: true,
+        externalModules: [
+          'aws-sdk',
+          'pg-native',
+          'mysql',
+          'sqlite3',
+          'tedious',
+          'better-sqlite3',
+          'mysql2',
+          'pg-query-stream',
+          'oracledb',
+          'class-validator',
+          'class-transformer',
+          '@nestjs/websockets/socket-module',
+          '@nestjs/microservices/microservices-module',
+          '@nestjs/microservices',
+        ],
+      },
     });
 
     const nestCartApiLambdaIntegration = new HttpLambdaIntegration(
@@ -39,7 +58,7 @@ export class NestCartServiceStack extends cdk.Stack {
     );
 
     httpApi.addRoutes({
-      path: '/{proxy+}',
+      path: '/{api+}',
       methods: [apiGw.HttpMethod.ANY],
       integration: nestCartApiLambdaIntegration,
     });

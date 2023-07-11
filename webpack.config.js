@@ -4,9 +4,20 @@ module.exports = (options, webpack) => {
     '@nestjs/websockets/socket-module',
   ];
 
+  const externalModules = [
+    'pg-native',
+    'mysql',
+    'sqlite3',
+    'tedious',
+    'better-sqlite3',
+    'mysql2',
+    'pg-query-stream',
+    'oracledb',
+  ];
+
   return {
     ...options,
-    externals: [],
+    externals: [...options.externals, ...externalModules],
     output: {
       ...options.output,
       libraryTarget: 'commonjs2',
