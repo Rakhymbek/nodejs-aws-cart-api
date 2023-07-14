@@ -2,9 +2,7 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as apiGw from '@aws-cdk/aws-apigatewayv2-alpha';
-import { HttpLambdaIntegration } from '@aws-cdk/aws-apigatewayv2-integrations-alpha';
-import * as path from 'path';
+import * as apiGw from 'aws-cdk-lib/aws-apigateway';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -12,18 +10,12 @@ export class NestCartServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const httpApi = new apiGw.HttpApi(this, 'NestCartServiceHttpApi', {
-      corsPreflight: {
-        allowHeaders: ['*'],
-        allowMethods: [apiGw.CorsHttpMethod.ANY],
-        allowOrigins: ['*'],
-      },
-    });
-
     const nestCartApiLambda = new NodejsFunction(this, 'nestCartApiLambda', {
-      entry: path.join(__dirname, '../../dist/main.js'),
-      handler: 'mainHandler',
-      runtime: lambda.Runtime.NODEJS_16_X,
+      entry: 'dist/src/main.js',
+      handler: 'handler',
+      memorySize: 1024,
+      timeout: cdk.Duration.seconds(30),
+      runtime: lambda.Runtime.NODEJS_18_X,
       environment: {
         PG_HOST: process.env.PG_HOST as string,
         PG_PORT: process.env.PG_PORT as string,
@@ -52,15 +44,12 @@ export class NestCartServiceStack extends cdk.Stack {
       },
     });
 
-    const nestCartApiLambdaIntegration = new HttpLambdaIntegration(
-      'NestCartApiLambdaIntegration',
-      nestCartApiLambda,
-    );
+    const restApi = new apiGw.LambdaRestApi(this, 'NestCartServiceRestApi', {
+      handler: nestCartApiLambda,
+    });
 
-    httpApi.addRoutes({
-      path: '/{api+}',
-      methods: [apiGw.HttpMethod.ANY],
-      integration: nestCartApiLambdaIntegration,
+    new cdk.CfnOutput(this, 'ApiEndpoint', {
+      value: restApi.url ?? '',
     });
   }
 }
