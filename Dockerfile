@@ -20,5 +20,5 @@ WORKDIR /app
 COPY --from=dependencies /app/package*.json ./
 RUN npm ci --only=production
 COPY --from=build /app/dist ./dist
-EXPOSE 3000
+EXPOSE 4000
 CMD ["npm", "run", "start:prod"]
