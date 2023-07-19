@@ -11,6 +11,8 @@ node_modules
 .cdk.staging
 cdk.out
 .env
+Dockerrun.aws.json
+Dockerrun.aws.json.zip
 
 # Logs
 logs
@@ -42,6 +44,8 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
